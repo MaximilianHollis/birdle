@@ -19,8 +19,8 @@ const Wrapper = styled.section`
 `
 
 const arr: element[] = new Array(30)
-  .fill({ letter: '', lock: false }, 0, 5)
-  .fill({ letter: '', lock: true }, 5, 30)
+  .fill({ letter: '', lock: false, err: false }, 0, 5)
+  .fill({ letter: '', lock: true, err: false }, 5, 30)
 
 const answer =
   answers.split('\n')[Math.floor(Math.random() * answers.split('\n').length)]
@@ -51,6 +51,7 @@ export default function Home() {
         newGrid[index > 0 ? index - 1 : 0] = {
           ...newGrid[index > 0 ? index - 1 : 0],
           letter: '',
+          err: false
         }
         setGrid(newGrid)
       }
@@ -59,21 +60,21 @@ export default function Home() {
   }
   const validate = () => {
     let word = grid.filter(({ lock }) => !lock).map(({ letter }) => letter)
-    //Validate here to check if a word or not
-    console.log(word.join(''))
-    if (words.includes(word.join(''))) {
-      let newGrid: element[] = JSON.parse(JSON.stringify(grid))
+    let newGrid: element[] = JSON.parse(JSON.stringify(grid))
 
-      const start = newGrid.findIndex(({ lock }) => !lock)
+    const start = newGrid.findIndex(({ lock }) => !lock)
+    if (words.includes(word.join(''))) {
       for (let i = start; i < start + 5 && i < 25; i++) {
         newGrid[i].lock = true
         newGrid[i + 5].lock = false
-        console.log(i)
+        newGrid[i].err = false
       }
-      setGrid(newGrid)
     } else {
-      alert('not a word')
+      for (let i = start; i < start + 5 && i < 25; i++) {
+        newGrid[i].err = true
+      }
     }
+    setGrid(newGrid)
   }
   console.log(grid)
   return (

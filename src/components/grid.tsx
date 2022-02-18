@@ -57,6 +57,7 @@ const item = {
 const square = (
   letter: boolean,
   lock: boolean,
+  err: boolean,
   correct: boolean,
   semiCorrect: boolean
 ) => {
@@ -65,28 +66,35 @@ const square = (
     background: '#ffffff',
     transform: 'rotateY(0deg)',
   }
-  if (letter) {
+  if (letter && err) {
     properties = {
       ...properties,
-      borderColor: '#878a8cc0',
+      borderColor: '#c04949c0',
     }
-    if (lock) {
+  } else {
+    if (letter) {
       properties = {
         ...properties,
+        borderColor: '#878a8cc0',
       }
-      if (semiCorrect) {
+      if (lock) {
         properties = {
           ...properties,
-          borderColor: '#bb9d5dc5',
-          background: '#bb9d5d1a',
         }
-      }
-      if (correct) {
-        properties = {
-          ...properties,
-          borderColor: '#38913ec8',
-          background: '#5dbb631a',
-          transform: 'rotateY(360deg)',
+        if (semiCorrect) {
+          properties = {
+            ...properties,
+            borderColor: '#bb9d5dc5',
+            background: '#bb9d5d1a',
+          }
+        }
+        if (correct) {
+          properties = {
+            ...properties,
+            borderColor: '#38913ec8',
+            background: '#5dbb631a',
+            transform: 'rotateY(360deg)',
+          }
         }
       }
     }
@@ -98,7 +106,7 @@ const square = (
 export default ({ grid, word }: { grid: element[]; word: string }) => {
   return (
     <Wrapper variants={container} initial='hidden' animate='visible'>
-      {grid.map(({ letter, lock }, i) => (
+      {grid.map(({ letter, lock, err }, i) => (
         <Square
           title={lock ? 'locked' : 'unlocked'}
           /* whileHover={{ scale: 1.05 }}
@@ -114,6 +122,7 @@ export default ({ grid, word }: { grid: element[]; word: string }) => {
            */ animate={square(
             !!letter,
             lock,
+            !!err,
             word?.split('')[i % 5] === letter,
             word?.indexOf(letter) != -1
           )}
