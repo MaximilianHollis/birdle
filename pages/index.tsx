@@ -39,10 +39,10 @@ export default function Home() {
             letter: value.slice(-1),
           }
           setGrid(newGrid)
-          if (index < 30) {
+          if (index < 29) {
             setIndex(index + 1)
           } else {
-            alert('game over')
+            setTimeout(() => alert('game over'), 50)
           }
         }
       } else {
@@ -92,7 +92,9 @@ export default function Home() {
           onChange={onChange}
           onKeyDown={(key) => key.code === 'Enter' && validate()}
         />
-        <button onClick={validate}>next</button>
+        <button onClick={validate} autoFocus={true}>
+          next
+        </button>
       </Wrapper>
     </>
   )
