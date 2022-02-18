@@ -119,7 +119,7 @@ export default ({ grid, word }: { grid: element[]; word: string }) => {
               delay: (i % 5) * 0.1,
             },
           }}
-          variants={item}
+          /* variants={item} */
           animate={square(
             !!letter,
             lock,

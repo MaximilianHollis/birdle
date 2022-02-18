@@ -54,16 +54,13 @@ export default ({ answer, grid }: { answer: string; grid: element[] }) => {
   const correct = (letter: string) => {
     const answerPos = answer.indexOf(letter)
     const wordPos = arr.indexOf(letter)
-    if (wordPos % 5 === answerPos % 5 && wordPos != -1) {
-      return true
-    }
+    return wordPos % 5 === answerPos % 5 && wordPos != -1
   }
+
   const semiCorrect = (letter: string) => {
     const answerPos = answer.indexOf(letter)
     const wordPos = arr.indexOf(letter)
-    if (wordPos != -1 && answerPos != -1) {
-      return true
-    }
+    return wordPos != -1 && answerPos != -1
   }
   return (
     <Wrapper>

@@ -67,8 +67,18 @@ export default function Home() {
     let newGrid: element[] = JSON.parse(JSON.stringify(grid))
     const start = newGrid.findIndex(({ lock }) => !lock)
     const isWord = word.length === 5 && words.includes(word.join(''))
-    if (isWord && index > 25) {
-      alert('Game Over!')
+    if (index > 28) {
+      if (isWord) {
+        for (let i = start; i < start + 5; i++) {
+          newGrid[i].lock = true
+          newGrid[i].err = false
+        }
+        setTimeout(() => alert('Game Over!'), 500)
+      } else {
+        for (let i = start; i < start + 5; i++) {
+          newGrid[i].err = true
+        }
+      }
     } else {
       if (isWord && index % 5 === 0) {
         for (let i = start; i < start + 5 && i < 25; i++) {
@@ -81,19 +91,19 @@ export default function Home() {
           newGrid[i].err = true
         }
       }
-      setGrid(newGrid)
     }
+    setGrid(newGrid)
   }
   return (
     <>
       <Wrapper>
-        <Grid grid={grid} word={answer} />
+        <Grid grid={grid} word={answer}/>
         <Grid grid={grid} word={answer} />
 
         <input
+          type='text'
           value={grid.map(({ letter }) => letter).join('')}
-          maxLength={30}
-          onChange={onChange}
+          onChange={(e) => onChange(e)}
           onKeyDown={(key) => key.code === 'Enter' && validate()}
         />
         <Keyboard answer={answer} grid={grid} />
