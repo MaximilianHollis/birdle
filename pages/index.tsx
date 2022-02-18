@@ -31,7 +31,7 @@ export default function Home() {
 
   const onChange = ({ target: { value } }: { target: { value: string } }) => {
     let newGrid: element[] = JSON.parse(JSON.stringify(grid))
-    if (value.match('/^[a-zA-Zs]*$/')) {
+    if (value.match(/^[a-zA-Zs]*$/)) {
       if (value.length > grid.filter(({ letter }) => letter).length) {
         if (!newGrid[index]?.lock) {
           newGrid[index] = {
