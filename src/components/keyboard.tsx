@@ -6,7 +6,7 @@ const Wrapper = styled.div``
 const Row = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 6px;
+  margin-top: 3px;
   gap: 0 6px;
 `
 
@@ -20,7 +20,7 @@ const Key = styled.button<{
   font-weight: bold;
   border: 0;
   padding: 0;
-  height: 58px;
+  height: 50px;
   border-radius: 4px;
   cursor: pointer;
   user-select: none;
@@ -34,8 +34,7 @@ const Key = styled.button<{
   align-items: center;
   text-transform: uppercase;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0.3);
-  height: 58px;
-  width: ${(props) => (props.length ? (props.length - 1) * 3 + 44 : 44)}px;
+  width: ${(props) => (props.length ? (props.length - 1) * 8 + 40 : 40)}px;
   text-transform: uppercase;
   transition: 0.5s ease;
 `

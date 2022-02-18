@@ -7,13 +7,13 @@ const Wrapper = styled(motion.div)`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   grid-gap: 4px;
-  width: 325px;
-  height: 390px;
+  width: 300px;
+  height: 350px;
 `
 
 const Square = styled(motion.div)<{ filled?: boolean }>`
-  width: 60px;
-  height: 60px;
+  width: 55px;
+  height: 55px;
   border-style: solid;
   border-width: 3px;
   border-color: #878a8c;
