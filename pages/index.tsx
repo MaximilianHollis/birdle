@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 import Grid from '../src/components/grid'
+import Keyboard from '../src/components/keyboard'
 import { element } from '../src/types'
 import { answers, words } from '../src/words'
 
@@ -33,19 +34,18 @@ export default function Home() {
     let newGrid: element[] = JSON.parse(JSON.stringify(grid))
     if (value.match(/^[a-zA-Zs]*$/)) {
       if (value.length > grid.filter(({ letter }) => letter).length) {
-        if (!newGrid[index]?.lock) {
-          newGrid[index] = {
-            ...newGrid[index],
-            letter: value.slice(-1),
-          }
-          setGrid(newGrid)
-          if (index < 29) {
+        if (index < 30) {
+          if (!newGrid[index]?.lock) {
+            newGrid[index] = {
+              ...newGrid[index],
+              letter: value.toLowerCase().slice(-1),
+            }
+            setGrid(newGrid)
             setIndex(index + 1)
-          } else {
-            setTimeout(() => alert('game over'), 50)
           }
         }
       } else {
+        console.log(index, newGrid[index - 1])
         if (!newGrid[index > 0 ? index - 1 : 0].lock) {
           setIndex(index > 0 ? index - 1 : 0)
           newGrid[index > 0 ? index - 1 : 0] = {
@@ -59,28 +59,31 @@ export default function Home() {
     } else {
       console.log('bad input')
     }
-
-    //setGrid([...grid, { letter: value, lock: false }])
   }
   const validate = () => {
-    let word = grid.filter(({ lock }) => !lock).map(({ letter }) => letter)
+    let word = grid
+      .filter(({ lock }, i) => !lock && i < index)
+      .map(({ letter }) => letter)
     let newGrid: element[] = JSON.parse(JSON.stringify(grid))
-
     const start = newGrid.findIndex(({ lock }) => !lock)
-    if (words.includes(word.join(''))) {
-      for (let i = start; i < start + 5 && i < 25; i++) {
-        newGrid[i].lock = true
-        newGrid[i + 5].lock = false
-        newGrid[i].err = false
-      }
+    const isWord = word.length === 5 && words.includes(word.join(''))
+    if (isWord && index > 25) {
+      alert('Game Over!')
     } else {
-      for (let i = start; i < start + 5 && i < 25; i++) {
-        newGrid[i].err = true
+      if (isWord && index % 5 === 0) {
+        for (let i = start; i < start + 5 && i < 25; i++) {
+          newGrid[i].lock = true
+          newGrid[i + 5].lock = false
+          newGrid[i].err = false
+        }
+      } else if (!isWord && word.length === 5) {
+        for (let i = start; i < start + 5 && i < 25; i++) {
+          newGrid[i].err = true
+        }
       }
+      setGrid(newGrid)
     }
-    setGrid(newGrid)
   }
-  console.log(grid)
   return (
     <>
       <Wrapper>
@@ -89,12 +92,11 @@ export default function Home() {
 
         <input
           value={grid.map(({ letter }) => letter).join('')}
+          maxLength={30}
           onChange={onChange}
           onKeyDown={(key) => key.code === 'Enter' && validate()}
         />
-        <button onClick={validate} autoFocus={true}>
-          next
-        </button>
+        <Keyboard answer={answer} grid={grid} />
       </Wrapper>
     </>
   )

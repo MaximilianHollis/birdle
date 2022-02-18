@@ -64,12 +64,14 @@ const square = (
   let properties = {
     borderColor: '#d3d6da',
     background: '#ffffff',
-    transform: 'rotateY(0deg)',
+    x: [0, 0, 0, 0, 0, 0, 0],
+    rotateY: 0,
   }
   if (letter && err) {
     properties = {
       ...properties,
       borderColor: '#c04949c0',
+      x: [0, 3, -3, 3, -3, 3, 0],
     }
   } else {
     if (letter) {
@@ -80,6 +82,7 @@ const square = (
       if (lock) {
         properties = {
           ...properties,
+          background: '#878a8c26',
         }
         if (semiCorrect) {
           properties = {
@@ -93,7 +96,7 @@ const square = (
             ...properties,
             borderColor: '#38913ec8',
             background: '#5dbb631a',
-            transform: 'rotateY(360deg)',
+            rotateY: 360,
           }
         }
       }
@@ -106,20 +109,18 @@ const square = (
 export default ({ grid, word }: { grid: element[]; word: string }) => {
   return (
     <Wrapper variants={container} initial='hidden' animate='visible'>
+      {console.log(word)}
       {grid.map(({ letter, lock, err }, i) => (
         <Square
           title={lock ? 'locked' : 'unlocked'}
-          /* whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-           */
           transition={{
-            transform: {
+            rotateY: {
               duration: 1,
-              delay: (i % 5) * 0.2,
+              delay: (i % 5) * 0.1,
             },
           }}
-          /*           variants={item}
-           */ animate={square(
+          variants={item}
+          animate={square(
             !!letter,
             lock,
             !!err,
