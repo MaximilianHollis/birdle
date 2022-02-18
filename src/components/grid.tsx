@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { element } from '../types'
 
 const Wrapper = styled(motion.div)`
-  margin: 0;
+  margin: 20px 0;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   grid-gap: 4px;

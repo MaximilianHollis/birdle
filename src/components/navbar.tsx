@@ -5,7 +5,6 @@ const Wrapper = styled.div`
   display: flex;
   margin: 0;
   width: 100%;
-  min-width: 1024px;
   height: 48px;
   max-height: 44px;
   background: rgba(0, 0, 0, 0.92);

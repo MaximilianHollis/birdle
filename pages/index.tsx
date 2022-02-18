@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import Grid from '../src/components/grid'
 import Keyboard from '../src/components/keyboard'
@@ -6,17 +6,12 @@ import { element } from '../src/types'
 import { answers, words } from '../src/words'
 
 const Wrapper = styled.section`
-  height: calc(100vh - 44px);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 10px 50px;
-  margin: 0;
-  align-content: center;
+  height: 100%;
+  padding: 100px 0;
+  width: 100%;
+  display: flex;
   align-items: center;
-  justify-items: center;
-  p {
-    height: 300px;
-  }
+  flex-direction: column;
 `
 
 const arr: element[] = new Array(30)
@@ -29,23 +24,23 @@ const answer =
 export default function Home() {
   const [grid, setGrid] = useState(arr)
   const [index, setIndex] = useState(0)
+  const ref = useRef<any>()
 
-  const onChange = ({ target: { value } }: { target: { value: string } }) => {
+  const onChange = (value: string) => {
     let newGrid: element[] = JSON.parse(JSON.stringify(grid))
-    if (value.match(/^[a-zA-Zs]*$/)) {
-      if (value.length > grid.filter(({ letter }) => letter).length) {
+    if (value.match(/^[a-zA-Zs]*$/) && value.length < 2) {
+      if (value) {
         if (index < 30) {
           if (!newGrid[index]?.lock) {
             newGrid[index] = {
               ...newGrid[index],
-              letter: value.toLowerCase().slice(-1),
+              letter: value.toLowerCase(),
             }
             setGrid(newGrid)
             setIndex(index + 1)
           }
         }
       } else {
-        console.log(index, newGrid[index - 1])
         if (!newGrid[index > 0 ? index - 1 : 0].lock) {
           setIndex(index > 0 ? index - 1 : 0)
           newGrid[index > 0 ? index - 1 : 0] = {
@@ -94,18 +89,26 @@ export default function Home() {
     }
     setGrid(newGrid)
   }
+
+  useEffect(() => {
+    if (ref.current) ref.current.focus()
+  }, [ref.current])
   return (
     <>
-      <Wrapper>
-        <Grid grid={grid} word={answer}/>
+      <Wrapper
+        tabIndex={-1}
+        ref={ref}
+        onKeyDown={(key) => {
+          if (key.code === 'Enter') {
+            validate()
+          } else if (key.code === 'Backspace') {
+            onChange('')
+          } else {
+            onChange(key.key)
+          }
+        }}
+      >
         <Grid grid={grid} word={answer} />
-
-        <input
-          type='text'
-          value={grid.map(({ letter }) => letter).join('')}
-          onChange={(e) => onChange(e)}
-          onKeyDown={(key) => key.code === 'Enter' && validate()}
-        />
         <Keyboard answer={answer} grid={grid} />
       </Wrapper>
     </>
