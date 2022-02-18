@@ -31,31 +31,35 @@ export default function Home() {
 
   const onChange = ({ target: { value } }: { target: { value: string } }) => {
     let newGrid: element[] = JSON.parse(JSON.stringify(grid))
-
-    if (value.length > grid.filter(({ letter }) => letter).length) {
-      if (!newGrid[index]?.lock) {
-        newGrid[index] = {
-          ...newGrid[index],
-          letter: value.slice(-1),
+    if (value.match('[a-zA-Z]+')) {
+      if (value.length > grid.filter(({ letter }) => letter).length) {
+        if (!newGrid[index]?.lock) {
+          newGrid[index] = {
+            ...newGrid[index],
+            letter: value.slice(-1),
+          }
+          setGrid(newGrid)
+          if (index < 30) {
+            setIndex(index + 1)
+          } else {
+            alert('game over')
+          }
         }
-        setGrid(newGrid)
-        if (index < 30) {
-          setIndex(index + 1)
-        } else {
-          alert('game over')
+      } else {
+        if (!newGrid[index > 0 ? index - 1 : 0].lock) {
+          setIndex(index > 0 ? index - 1 : 0)
+          newGrid[index > 0 ? index - 1 : 0] = {
+            ...newGrid[index > 0 ? index - 1 : 0],
+            letter: '',
+            err: false,
+          }
+          setGrid(newGrid)
         }
       }
     } else {
-      if (!newGrid[index > 0 ? index - 1 : 0].lock) {
-        setIndex(index > 0 ? index - 1 : 0)
-        newGrid[index > 0 ? index - 1 : 0] = {
-          ...newGrid[index > 0 ? index - 1 : 0],
-          letter: '',
-          err: false
-        }
-        setGrid(newGrid)
-      }
+      console.log('bad input')
     }
+
     //setGrid([...grid, { letter: value, lock: false }])
   }
   const validate = () => {
