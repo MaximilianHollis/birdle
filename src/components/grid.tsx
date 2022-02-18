@@ -3,12 +3,10 @@ import styled from 'styled-components'
 import { element } from '../types'
 
 const Wrapper = styled(motion.div)`
-  margin: 20px 0;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   grid-gap: 4px;
-  width: 300px;
-  height: 350px;
+  margin-bottom: 30px;
 `
 
 const Square = styled(motion.div)<{ filled?: boolean }>`
@@ -119,7 +117,7 @@ export default ({ grid, word }: { grid: element[]; word: string }) => {
               delay: (i % 5) * 0.1,
             },
           }}
-          /* variants={item} */
+          variants={item}
           animate={square(
             !!letter,
             lock,

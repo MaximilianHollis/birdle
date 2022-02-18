@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import styled from 'styled-components'
 import { element } from '../types'
 
@@ -10,7 +11,7 @@ const Row = styled.div`
   gap: 0 6px;
 `
 
-const Key = styled.button<{
+const Key = styled(motion.button)<{
   length?: number
   correct?: boolean
   semiCorrect?: boolean
@@ -43,9 +44,17 @@ const row1 = 'Q w e r t y u i o p'.split(' ')
 const row2 = 'a s d f g h j k l'.split(' ')
 const row3 = 'enter z x c v b n m del'.split(' ')
 
-export default ({ answer, grid }: { answer: string; grid: element[] }) => {
+export default ({
+  answer,
+  grid,
+  key,
+}: {
+  answer: string
+  grid: element[]
+  key: string
+}) => {
   const arr = grid.filter(({ lock }) => lock).map(({ letter }) => letter)
-
+  console.log(key)
   const unUsed = (letter: string) => {
     return arr.some((l) => letter == l)
   }

@@ -8,10 +8,17 @@ import { answers, words } from '../src/words'
 const Wrapper = styled.section`
   height: 100%;
   padding: 100px 0;
-  width: 100%;
+  :focus {
+    outline: none;
+  }
+`
+
+const Center = styled.div`
   display: flex;
-  align-items: center;
+  justify-content: center;
   flex-direction: column;
+  align-items: center;
+  margin: auto;
 `
 
 const arr: element[] = new Array(30)
@@ -24,6 +31,7 @@ const answer =
 export default function Home() {
   const [grid, setGrid] = useState(arr)
   const [index, setIndex] = useState(0)
+  const [key, setKey] = useState('')
   const ref = useRef<any>()
 
   const onChange = (value: string) => {
@@ -68,7 +76,7 @@ export default function Home() {
           newGrid[i].lock = true
           newGrid[i].err = false
         }
-        setTimeout(() => alert('Game Over!'), 500)
+        setTimeout(() => alert('Game Over!'), 1500)
       } else {
         for (let i = start; i < start + 5; i++) {
           newGrid[i].err = true
@@ -101,15 +109,20 @@ export default function Home() {
         onKeyDown={(key) => {
           if (key.code === 'Enter') {
             validate()
+            setKey('enter')
           } else if (key.code === 'Backspace') {
             onChange('')
+            setKey('del')
           } else {
             onChange(key.key)
+            setKey(key.key)
           }
         }}
       >
-        <Grid grid={grid} word={answer} />
-        <Keyboard answer={answer} grid={grid} />
+        <Center>
+          <Grid grid={grid} word={answer} />
+          <Keyboard answer={answer} grid={grid} key={key} />
+        </Center>
       </Wrapper>
     </>
   )
