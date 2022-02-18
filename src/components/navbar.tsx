@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 const Wrapper = styled.div`
   z-index: 9999;
-  display: block;
+  display: flex;
   margin: 0;
   width: 100%;
   min-width: 1024px;
@@ -14,8 +14,22 @@ const Wrapper = styled.div`
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+`
+
+const Title = styled.h2`
+  color: #ffffff;
+`
+
+const Statistics = styled.div`
+  color: #ffffff;
 `
 
 export default () => {
-  return <Wrapper>hello</Wrapper>
+  return <Wrapper>
+    <Title>Birdle</Title>
+  </Wrapper>
 }
