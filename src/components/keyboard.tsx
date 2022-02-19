@@ -1,26 +1,29 @@
-import { motion } from 'framer-motion'
-import { useContext } from 'react'
-import styled from 'styled-components'
-import State from '../context/state'
-import { Action } from '../types'
+import { motion } from "framer-motion";
+import { useContext } from "react";
+import styled from "styled-components";
+import State from "../context/state";
+import { Action } from "../types";
+
+import { FiDelete } from "react-icons/fi";
+import { AiOutlineEnter } from "react-icons/ai";
 
 const Wrapper = styled.div`
   width: 100%;
-`
+`;
 
 const Row = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 3px;
   gap: 0 2px;
-`
+`;
 
 interface KeyProps {
-  readonly length?: number
-  readonly $correct: boolean
-  readonly $semicorrect: boolean
-  readonly $unused: boolean
-  readonly $borderColor: boolean
+  readonly length?: number;
+  readonly $correct: boolean;
+  readonly $semicorrect: boolean;
+  readonly $unused: boolean;
+  readonly $borderColor: boolean;
 }
 
 const Key = styled(motion.button)<KeyProps>`
@@ -42,52 +45,52 @@ const Key = styled(motion.button)<KeyProps>`
   text-transform: uppercase;
   border-style: solid;
   border-width: 2px;
-  border-color: ${(props) => (props.$borderColor ? '#000000' : '#ffffff')};
+  border-color: ${(props) => (props.$borderColor ? "#000000" : "#ffffff")};
   width: ${(props) => (props.length ? (props.length - 1) * 6 + 32 : 32)}px;
   text-transform: uppercase;
   transition: 0.5s ease;
   :active {
     border-color: #000000;
   }
-`
+`;
 
 const keyboard =
-  'q w e r t y u i o p' +
-  '\n' +
-  'a s d f g h j k l' +
-  '\n' +
-  'enter z x c v b n m del'
+  "q w e r t y u i o p" +
+  "\n" +
+  "a s d f g h j k l" +
+  "\n" +
+  "enter z x c v b n m del";
 
 export default () => {
-  const { state, dispatch } = useContext(State)
+  const { state, dispatch } = useContext(State);
   const correct = (letter: string) =>
-    !!state.grid.find(({ letter: l, correct }) => !!(l === letter && correct))
+    !!state.grid.find(({ letter: l, correct }) => !!(l === letter && correct));
   const semiCorrect = (letter: string) =>
     !!state.grid.find(
       ({ letter: l, semiCorrect }) => !!(l === letter && semiCorrect)
-    )
+    );
   const unUsed = (letter: string) =>
     !!state.grid.find(
       ({ letter: l, correct, semiCorrect, lock }) =>
         !!(l === letter && !semiCorrect && !correct && lock)
-    )
+    );
 
   const onClick = (l: string) => {
-    if (l === 'enter') {
-      dispatch({ type: Action.input, payload: { key: 'enter' } })
-    } else if (l === 'del') {
-      dispatch({ type: Action.input, payload: { key: 'del' } })
+    if (l === "enter") {
+      dispatch({ type: Action.input, payload: { key: "enter" } });
+    } else if (l === "del") {
+      dispatch({ type: Action.input, payload: { key: "del" } });
     } else {
-      dispatch({ type: Action.input, payload: { key: l } })
+      dispatch({ type: Action.input, payload: { key: l } });
     }
-  }
+  };
 
   return (
     <Wrapper>
-      {keyboard.split('\n').map((row, i) => {
+      {keyboard.split("\n").map((row, i) => {
         return (
           <Row key={i}>
-            {row.split(' ').map((l) => (
+            {row.split(" ").map((l) => (
               <Key
                 onClick={() => onClick(l)}
                 key={l}
@@ -100,12 +103,12 @@ export default () => {
                 }
                 length={l.length}
               >
-                {l}
+                {l == "del" ? <FiDelete size={20} /> : l}
               </Key>
             ))}
           </Row>
-        )
+        );
       })}
     </Wrapper>
-  )
-}
+  );
+};
