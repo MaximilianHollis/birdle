@@ -2,6 +2,7 @@ import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 import { FC, ReactElement, ReactNode } from 'react'
 import { createGlobalStyle } from 'styled-components'
+import { StateProvider } from '../src/context/state'
 
 const GlobalStyle = createGlobalStyle`
   html {
@@ -28,8 +29,10 @@ type AppPropsWithLayout = AppProps & {
 const App: FC<AppProps> = ({ Component, pageProps }: AppPropsWithLayout) => {
   return (
     <>
-      <Navbar />
-      <Component {...pageProps} />
+      <StateProvider>
+        <Navbar />
+        <Component {...pageProps} />
+      </StateProvider>
       <GlobalStyle />
     </>
   )

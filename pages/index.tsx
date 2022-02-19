@@ -1,9 +1,10 @@
-import { useState, useRef, useEffect } from 'react'
+import { useRef, useEffect, useContext, useState } from 'react'
 import styled from 'styled-components'
+import State from '../src/context/state'
 import Grid from '../src/components/grid'
 import Keyboard from '../src/components/keyboard'
-import { element } from '../src/types'
-import { answers, words } from '../src/words'
+import { Action } from '../src/types'
+import HowTo from '../src/components/modals/howTo'
 
 const Wrapper = styled.section`
   height: 100%;
@@ -21,107 +22,33 @@ const Center = styled.div`
   margin: auto;
 `
 
-const arr: element[] = new Array(30)
-  .fill({ letter: '', lock: false, err: false }, 0, 5)
-  .fill({ letter: '', lock: true, err: false }, 5, 30)
-
-const answer =
-  answers.split('\n')[Math.floor(Math.random() * answers.split('\n').length)]
-
 export default function Home() {
-  const [grid, setGrid] = useState(arr)
-  const [index, setIndex] = useState(0)
-  const [key, setKey] = useState('')
   const ref = useRef<any>()
-
-  const onChange = (value: string) => {
-    let newGrid: element[] = JSON.parse(JSON.stringify(grid))
-    if (value.match(/^[a-zA-Zs]*$/) && value.length < 2) {
-      if (value) {
-        if (index < 30) {
-          if (!newGrid[index]?.lock) {
-            newGrid[index] = {
-              ...newGrid[index],
-              letter: value.toLowerCase(),
-            }
-            setGrid(newGrid)
-            setIndex(index + 1)
-          }
-        }
-      } else {
-        if (!newGrid[index > 0 ? index - 1 : 0].lock) {
-          setIndex(index > 0 ? index - 1 : 0)
-          newGrid[index > 0 ? index - 1 : 0] = {
-            ...newGrid[index > 0 ? index - 1 : 0],
-            letter: '',
-            err: false,
-          }
-          setGrid(newGrid)
-        }
-      }
-    } else {
-      console.log('bad input')
-    }
-  }
-  const validate = () => {
-    let word = grid
-      .filter(({ lock }, i) => !lock && i < index)
-      .map(({ letter }) => letter)
-    let newGrid: element[] = JSON.parse(JSON.stringify(grid))
-    const start = newGrid.findIndex(({ lock }) => !lock)
-    const isWord = word.length === 5 && words.includes(word.join(''))
-    if (index > 28) {
-      if (isWord) {
-        for (let i = start; i < start + 5; i++) {
-          newGrid[i].lock = true
-          newGrid[i].err = false
-        }
-        setTimeout(() => alert('Game Over!'), 1500)
-      } else {
-        for (let i = start; i < start + 5; i++) {
-          newGrid[i].err = true
-        }
-      }
-    } else {
-      if (isWord && index % 5 === 0) {
-        for (let i = start; i < start + 5 && i < 25; i++) {
-          newGrid[i].lock = true
-          newGrid[i + 5].lock = false
-          newGrid[i].err = false
-        }
-      } else if (!isWord && word.length === 5) {
-        for (let i = start; i < start + 5 && i < 25; i++) {
-          newGrid[i].err = true
-        }
-      }
-    }
-    setGrid(newGrid)
-  }
+  const { dispatch } = useContext(State)
+  const [open, isOpen] = useState(false)
 
   useEffect(() => {
     if (ref.current) ref.current.focus()
   }, [ref.current])
   return (
     <>
+      <HowTo isOpen={open} onClose={() => isOpen(!open)} title='Hello' />
       <Wrapper
         tabIndex={-1}
         ref={ref}
         onKeyDown={(key) => {
           if (key.code === 'Enter') {
-            validate()
-            setKey('enter')
+            dispatch({ type: Action.input, payload: { key: 'enter' } })
           } else if (key.code === 'Backspace') {
-            onChange('')
-            setKey('del')
+            dispatch({ type: Action.input, payload: { key: 'del' } })
           } else {
-            onChange(key.key)
-            setKey(key.key)
+            dispatch({ type: Action.input, payload: { key: key.key } })
           }
         }}
       >
         <Center>
-          <Grid grid={grid} word={answer} />
-          <Keyboard answer={answer} grid={grid} key={key} />
+          <Grid />
+          <Keyboard />
         </Center>
       </Wrapper>
     </>

@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion'
+import { useContext } from 'react'
 import styled from 'styled-components'
-import { element } from '../types'
+import State from '../context/state'
+import { Action } from '../types'
 
 const Wrapper = styled.div``
 
@@ -8,111 +10,100 @@ const Row = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 3px;
-  gap: 0 6px;
+  gap: 0 2px;
 `
 
-const Key = styled(motion.button)<{
-  length?: number
-  correct?: boolean
-  semiCorrect?: boolean
-  unUsed?: boolean
-}>`
+interface KeyProps {
+  readonly length?: number
+  readonly $correct: boolean
+  readonly $semicorrect: boolean
+  readonly $unused: boolean
+  readonly $borderColor: boolean
+}
+
+const Key = styled(motion.button)<KeyProps>`
   font-family: inherit;
   font-weight: bold;
-  border: 0;
   padding: 0;
-  height: 50px;
+  height: 46px;
   border-radius: 4px;
   cursor: pointer;
   user-select: none;
   background: #d3d6da;
-  ${(props) => props.unUsed && `background: #969aa1;`}
-  ${(props) => props.semiCorrect && `background: #bb9d5dc5;`}
-  ${(props) => props.correct && `background: #38913ec8;`}
+  ${(props) => props.$unused && `background: #969aa1;`}
+  ${(props) => props.$semicorrect && `background: #bb9d5dc5;`}
+  ${(props) => props.$correct && `background: #38913ec8;`}
   color: black;
   display: flex;
   justify-content: center;
   align-items: center;
   text-transform: uppercase;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.3);
-  width: ${(props) => (props.length ? (props.length - 1) * 8 + 40 : 40)}px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: ${(props) => (props.$borderColor ? '#000000' : '#ffffff')};
+  width: ${(props) => (props.length ? (props.length - 1) * 6 + 32 : 32)}px;
   text-transform: uppercase;
   transition: 0.5s ease;
+  :active {
+    border-color: #000000;
+  }
 `
 
-const row1 = 'Q w e r t y u i o p'.split(' ')
-const row2 = 'a s d f g h j k l'.split(' ')
-const row3 = 'enter z x c v b n m del'.split(' ')
+const keyboard =
+  'q w e r t y u i o p' +
+  '\n' +
+  'a s d f g h j k l' +
+  '\n' +
+  'enter z x c v b n m del'
 
-export default ({
-  answer,
-  grid,
-  key,
-}: {
-  answer: string
-  grid: element[]
-  key: string
-}) => {
-  const arr = grid.filter(({ lock }) => lock).map(({ letter }) => letter)
-  console.log(key)
-  const unUsed = (letter: string) => {
-    return arr.some((l) => letter == l)
+export default () => {
+  const { state, dispatch } = useContext(State)
+  const correct = (letter: string) =>
+    !!state.grid.find(({ letter: l, correct }) => !!(l === letter && correct))
+  const semiCorrect = (letter: string) =>
+    !!state.grid.find(
+      ({ letter: l, semiCorrect }) => !!(l === letter && semiCorrect)
+    )
+  const unUsed = (letter: string) =>
+    !!state.grid.find(
+      ({ letter: l, correct, semiCorrect, lock }) =>
+        !!(l === letter && !semiCorrect && !correct && lock)
+    )
+
+  const onClick = (l: string) => {
+    if (l === 'enter') {
+      dispatch({ type: Action.input, payload: { key: 'enter' } })
+    } else if (l === 'del') {
+      dispatch({ type: Action.input, payload: { key: 'del' } })
+    } else {
+      dispatch({ type: Action.input, payload: { key: l } })
+    }
   }
 
-  const correct = (letter: string) => {
-    const answerPos = answer.indexOf(letter)
-    const wordPos = arr.indexOf(letter)
-    return wordPos % 5 === answerPos % 5 && wordPos != -1
-  }
-
-  const semiCorrect = (letter: string) => {
-    const answerPos = answer.indexOf(letter)
-    const wordPos = arr.indexOf(letter)
-    return wordPos != -1 && answerPos != -1
-  }
   return (
     <Wrapper>
-      <Row>
-        {row1.map((l) => (
-          <Key
-            key={l}
-            correct={correct(l)}
-            semiCorrect={semiCorrect(l)}
-            unUsed={unUsed(l)}
-          >
-            {l}
-          </Key>
-        ))}
-      </Row>
-      <Row>
-        <Row>
-          {row2.map((l) => (
-            <Key
-              key={l}
-              correct={correct(l)}
-              semiCorrect={semiCorrect(l)}
-              unUsed={unUsed(l)}
-            >
-              {l}
-            </Key>
-          ))}
-        </Row>
-      </Row>
-      <Row>
-        <Row>
-          {row3.map((l) => (
-            <Key
-              key={l}
-              length={l.length}
-              correct={correct(l)}
-              semiCorrect={semiCorrect(l)}
-              unUsed={unUsed(l)}
-            >
-              {l}
-            </Key>
-          ))}
-        </Row>
-      </Row>
+      {keyboard.split('\n').map((row, i) => {
+        return (
+          <Row key={i}>
+            {row.split(' ').map((l) => (
+              <Key
+                onClick={() => onClick(l)}
+                key={l}
+                $correct={correct(l)}
+                $semicorrect={semiCorrect(l)}
+                $unused={unUsed(l)}
+                $borderColor={
+                  state.grid.filter(({ letter }) => letter).slice(-1)[0]
+                    ?.letter == l
+                }
+                length={l.length}
+              >
+                {l}
+              </Key>
+            ))}
+          </Row>
+        )
+      })}
     </Wrapper>
   )
 }

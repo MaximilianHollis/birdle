@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
+import { useContext } from 'react'
 import styled from 'styled-components'
-import { element } from '../types'
+import State from '../context/state'
 
 const Wrapper = styled(motion.div)`
   display: grid;
@@ -14,7 +15,7 @@ const Square = styled(motion.div)<{ filled?: boolean }>`
   height: 55px;
   border-style: solid;
   border-width: 3px;
-  border-color: #878a8c;
+  border-color: #d3d6da;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -104,11 +105,11 @@ const square = (
   return properties
 }
 
-export default ({ grid, word }: { grid: element[]; word: string }) => {
+export default () => {
+  const { state } = useContext(State)
   return (
     <Wrapper variants={container} initial='hidden' animate='visible'>
-      {console.log(word)}
-      {grid.map(({ letter, lock, err }, i) => (
+      {state.grid.map(({ letter, lock, err, correct, semiCorrect }, i) => (
         <Square
           title={lock ? 'locked' : 'unlocked'}
           transition={{
@@ -118,13 +119,7 @@ export default ({ grid, word }: { grid: element[]; word: string }) => {
             },
           }}
           variants={item}
-          animate={square(
-            !!letter,
-            lock,
-            !!err,
-            word?.split('')[i % 5] === letter,
-            word?.indexOf(letter) != -1
-          )}
+          animate={square(!!letter, lock, !!err, !!correct, !!semiCorrect)}
           key={i}
         >
           {letter}
