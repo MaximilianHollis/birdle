@@ -2,13 +2,17 @@ import { motion } from "framer-motion";
 import styled from "styled-components";
 import { element } from "../types";
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  width: 100%;
+`;
 
 const Row = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 3px;
   gap: 0 6px;
+  width: 100%;
+  padding: 0 10px;
 `;
 
 const Key = styled(motion.button)<{
@@ -34,14 +38,10 @@ const Key = styled(motion.button)<{
   align-items: center;
   text-transform: uppercase;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0.3);
-  width: ${(props) => (props.length ? (props.length - 1) * 8 + 40 : 40)}px;
-  max-width: ${(props) => (props.length ? (props.length - 1) * 8 + 40 : 40)}px;
+  width: ${(props) => (props.length ? (props.length - 1) * 10 + 45 : 45)}px;
+  max-width: ${(props) => (props.length ? (props.length - 1) * 10 + 45 : 45)}px;
   text-transform: uppercase;
   transition: 0.5s ease;
-
-  @media screen and (max-width: 480px) {
-    width: ${(props) => (props.length ? (props.length - 1) * 8 + 25 : 25)}px;
-  }
 `;
 
 const row1 = "q w e r t y u i o p".split(" ");
