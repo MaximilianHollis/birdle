@@ -90,8 +90,8 @@ export default function Menu({
             onKeyDown={(e) => e.key === 'Escape' && onClose()}
           >
             <Wrapper>
-              <Item variants={item}>Hello</Item>
-              <Item variants={item}>Hello</Item>
+              <Item variants={item}>1. Hello</Item>
+              <Item variants={item}>2. Hello</Item>
               <Item variants={item}>Hello</Item>
               <Item variants={item}>Hello</Item>
               <Item variants={item}>Hello</Item>

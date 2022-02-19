@@ -5,12 +5,12 @@ export default function useKeyboard() {
 
   //ADD THROTTLING
   useEffect(() => {
-    window.addEventListener('keydown', (e) =>
+    window.addEventListener('keydown', (e) => {
       setKey({ key: e.key, code: e.code })
-    )
-    return window.removeEventListener('keydown', (e) =>
+    })
+    return window.removeEventListener('keydown', (e) => {
       setKey({ key: e.key, code: e.code })
-    )
+    })
   }, [])
   return key
 }

@@ -17,7 +17,8 @@ export const input = (
         }
         return newGrid
       } else {
-        //Could attempt to validate for isWord only but idk if worth the effort and not in the real game
+        //Could also attempt to validate for isWord only but idk if worth the effort and not in the real game
+        //Make enter key sparkle onPopup locked?
         onPopup('locked')
       }
     } else if (key === 'Backspace') {

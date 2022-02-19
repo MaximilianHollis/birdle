@@ -7,7 +7,7 @@ const Wrapper = styled(motion.div)`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   grid-gap: 4px;
-  margin-bottom: 30px;
+  margin: 10px 0;
   position: relative;
 `
 

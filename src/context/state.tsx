@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useEffect } from 'react'
 import { createReducer } from 'react-use'
-import { useRouter } from 'next/router'
-import { nanoid } from 'nanoid'
 import createSagaMiddleware from 'redux-saga'
 import logger from 'redux-logger'
 import { Action, IAction, IStateContext, IElement } from '../types'
 import { input, validate } from './reducers/game'
+import useKeyboard from '../hooks/useKeyboard'
 
 const arr: IElement[] = new Array(30)
   .fill({ letter: '', lock: false, err: false }, 0, 5)
@@ -71,6 +70,12 @@ export const StateProvider = (props: {
       }
     }
   }
+  const key = useKeyboard()
+  useEffect(() => {
+    if (key?.code) {
+      dispatch({ type: Action.input, payload: key })
+    }
+  }, [key])
 
   return (
     <State.Provider
