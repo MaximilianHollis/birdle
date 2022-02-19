@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
 const Wrapper = styled.div`
   z-index: 9999;
@@ -17,18 +17,16 @@ const Wrapper = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-`
+`;
 
 const Title = styled.h2`
   color: #ffffff;
-`
-
-const Statistics = styled.div`
-  color: #ffffff;
-`
+`;
 
 export default () => {
-  return <Wrapper>
-    <Title>Birdle</Title>
-  </Wrapper>
-}
+  return (
+    <Wrapper>
+      <Title>Birdle</Title>
+    </Wrapper>
+  );
+};

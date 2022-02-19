@@ -4,7 +4,9 @@ import styled from 'styled-components'
 import State from '../context/state'
 import { Action } from '../types'
 
-const Wrapper = styled.div``
+const Wrapper = styled.div`
+  width: 100%;
+`
 
 const Row = styled.div`
   display: flex;
