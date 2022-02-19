@@ -1,7 +1,11 @@
 import { IElement } from '../../types'
 import { words } from '../../words'
 
-export const input = (key: string, grid: IElement[]) => {
+export const input = (
+  key: string,
+  grid: IElement[],
+  onPopup: (arg0: string) => void
+) => {
   let newGrid: IElement[] = JSON.parse(JSON.stringify(grid))
   const index = newGrid.filter(({ letter }) => letter).length
   if (key.match(/^[a-zA-Zs]*$/)) {
@@ -12,8 +16,11 @@ export const input = (key: string, grid: IElement[]) => {
           letter: key.toLowerCase(),
         }
         return newGrid
+      } else {
+        //Could attempt to validate for isWord only but idk if worth the effort and not in the real game
+        onPopup('locked')
       }
-    } else if (key === 'del') {
+    } else if (key === 'Backspace') {
       if (!newGrid[index > 0 ? index - 1 : 0].lock) {
         newGrid[index > 0 ? index - 1 : 0] = {
           ...newGrid[index > 0 ? index - 1 : 0],
@@ -42,7 +49,10 @@ export const validate = (
   if (index > 28) {
     if (isWord) {
       for (let i = start; i < start + 5; i++) {
+        newGrid[i].correct = check(newGrid[i].letter, i % 5, 'correct')
+        newGrid[i].semiCorrect = check(newGrid[i].letter, i % 5, 'semiCorrect')
         newGrid[i].lock = true
+        newGrid[i].err = false
         newGrid[i].err = false
       }
       setTimeout(() => alert('Game Over!'), 1500)

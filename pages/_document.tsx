@@ -37,12 +37,12 @@ export default class MyDocument extends Document {
     return (
       <Html lang='en' dir='ltr'>
         <Head>
-          {/* <meta name='application-name' content={APP_NAME} />{' '}
-          <meta name='description' content={APP_DESCRIPTION} />{' '}
+          <meta name='application-name' content={'Birdle🐦'} />{' '}
+          <meta name='description' content={'Birdle🐦 Wordle, but better!'} />{' '}
           <meta name='format-detection' content='telephone=no' />
           <meta name='mobile-web-app-capable' content='no' />
-          <meta name='theme-color' content={Theme_Color} />{' '}
-          <link rel='preconnect' href='https://fonts.gstatic.com' /> */}
+          <meta name='theme-color' content={'#38913ec8'} />{' '}
+          <link rel='preconnect' href='https://fonts.gstatic.com' />
           <link
             href='https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap'
             rel='stylesheet'
@@ -59,7 +59,8 @@ export default class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
-          <div id='portal' />
+          <div id='menu' />
+          <div id='modal' />
         </body>{' '}
       </Html>
     )

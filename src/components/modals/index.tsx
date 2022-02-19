@@ -2,9 +2,10 @@ import { AnimatePresence, motion } from 'framer-motion'
 import Portal from '../../HOCs/portal'
 import { IoMenu, IoClose } from 'react-icons/io5'
 import styled from 'styled-components'
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useEffect } from 'react'
+import useKeyboard from '../../hooks/useKeyboard'
 
-export const Container = styled(motion.div)`
+const Container = styled(motion.div)`
   position: fixed;
   top: 0;
   left: 0;
@@ -20,23 +21,22 @@ export const Container = styled(motion.div)`
   }
 `
 
-export const Wrapper = styled(motion.div)`
-  width: 600px;
-  max-width: 100%;
-  height: 600px;
+const Wrapper = styled(motion.div)`
+  width: 500px;
+  max-width: 95%;
+  height: 250px;
+  max-height: 90%;
   position: relative;
   border-radius: 8px;
   border: 2px solid #d3d6da;
   background: white;
   box-shadow: 0 4px 23px 0 rgb(0 0 0 / 20%);
-  width: 90%;
-  max-height: 90%;
   overflow-y: auto;
   box-sizing: border-box;
   border-radius: 10px;
 `
 
-export const Header = styled(motion.div)`
+const Header = styled(motion.div)`
   border-bottom: 1px solid #1e2131;
   box-sizing: border-box;
   height: 56px;
@@ -48,12 +48,12 @@ export const Header = styled(motion.div)`
   /* identical to box height */
   display: flex;
   align-items: center;
-  color: #ffffff;
+  color: #000000;
   padding: 10px 15px;
   position: relative;
 `
 
-export const IconBox = styled(motion.div)`
+const IconBox = styled(motion.div)`
   height: 36px;
   width: 36px;
   display: flex;
@@ -65,7 +65,7 @@ export const IconBox = styled(motion.div)`
   margin-right: 12px;
 `
 
-export const CloseBox = styled(motion.div)`
+const CloseBox = styled(motion.div)`
   position: absolute;
   right: 16px;
   height: 30px;
@@ -79,14 +79,14 @@ export const CloseBox = styled(motion.div)`
   cursor: pointer;
 `
 
-export const Content = styled(motion.div)``
+const Content = styled(motion.div)``
 
 const spring = {
   type: 'spring',
   stiffness: 500,
-  mass: 1,
+  mass: 0.5,
   damping: 50,
-  bounce: 1,
+  bounce: 0.1,
 }
 
 export default function ModalSkeleton({
@@ -103,15 +103,8 @@ export default function ModalSkeleton({
   return (
     <AnimatePresence>
       {isOpen && (
-        <Portal>
-          <Container
-            transition={spring}
-            /* initial={{ backdropFilter: 'brightness(1)' }}
-            animate={{ backdropFilter: 'brightness(0.7)' }}
-            exit={{ backdropFilter: 'brightness(1)' }} */
-            onKeyDown={(e) => e.key === 'Escape' && onClose()}
-            tabIndex={0}
-          >
+        <Portal id='modal'>
+          <Container transition={spring}>
             <Wrapper
               transition={spring}
               initial={{ opacity: 0, y: -200 }}
@@ -120,7 +113,7 @@ export default function ModalSkeleton({
             >
               <Header>
                 <IconBox>
-                  <IoMenu size={20} color='black' />
+                  <IoMenu size={30} color='black' />
                 </IconBox>
                 {title}{' '}
                 <CloseBox
@@ -128,7 +121,7 @@ export default function ModalSkeleton({
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <IoClose size={20} color='black' />
+                  <IoClose size={30} color='black' />
                 </CloseBox>
               </Header>
               <Content>{children}</Content>

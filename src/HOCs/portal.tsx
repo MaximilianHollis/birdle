@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 
-const Portal = ({ children }) => {
+const Portal = ({ children, id }: { children: ReactNode; id: string }) => {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -11,7 +11,8 @@ const Portal = ({ children }) => {
   }, [])
 
   return mounted
-    ? createPortal(children, document.querySelector('#portal'))
+    ? //@ts-expect-error stupid
+      createPortal(children, document.querySelector('#' + id))
     : null
 }
 

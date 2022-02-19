@@ -36,19 +36,17 @@ export const StateProvider = (props: {
     //let actionId = nanoid()
     switch (action.type) {
       case Action.input:
-        if (action.payload.key === 'enter') {
+        if (action.payload?.code === 'Enter') {
           return {
             ...state,
             grid: validate(state.grid, check),
           }
-        } else {
+        } else if (action.payload?.key) {
           return {
             ...state,
-            grid: input(action.payload.key, state.grid),
+            grid: input(action.payload.key, state.grid, console.log),
           }
         }
-      case Action.check:
-        return state
       default:
         return state
     }
