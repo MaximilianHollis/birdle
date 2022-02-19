@@ -5,7 +5,6 @@ import State from "../context/state";
 import { Action } from "../types";
 
 import { FiDelete } from "react-icons/fi";
-import { AiOutlineEnter } from "react-icons/ai";
 
 const Wrapper = styled.div`
   width: 100%;
