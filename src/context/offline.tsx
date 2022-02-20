@@ -9,7 +9,6 @@ import GameState from '../components/modals/gameState'
 const genWord = () => {
   const choices = answers.split('\n')
   const choice = choices[Math.floor(Math.random() * choices.length)]
-  console.log(choice)
   return choice
 }
 
@@ -42,7 +41,7 @@ export const StateProvider = (props: {
     const check = (letter: string, index: number, key: string) => {
       const ans = state.answer
       if (key === 'correct') {
-        if (ans.indexOf(letter) === index) {
+        if (ans.split('')[index] === letter) {
           return true
         } else {
           return false
@@ -56,25 +55,12 @@ export const StateProvider = (props: {
       }
     }
 
-    const checkWin = (word: string) => {
-      if (word === state.answer) {
-        //YOU MAY WANT TO PUT A DELAY HERE
-        setGameModal('You win!')
-        return true
-      } else {
-        return false
-      }
-    }
-    const gameOver = () => {
-      setTimeout(() => setGameModal('You lose!'), 1000)
-    }
-    //let actionId = nanoid()
     switch (action.type) {
       case Action.input:
         if (action.payload?.code === 'Enter') {
           return {
             ...state,
-            grid: validate(state.grid, check, checkWin, gameOver),
+            grid: validate(state.grid, check),
           }
         } else if (action.payload?.key) {
           return {
@@ -83,7 +69,7 @@ export const StateProvider = (props: {
           }
         }
       case Action.reset:
-        return { ...state, answer: genWord() }
+        return { ...state, answer: genWord(), grid: arr }
       default:
         return state
     }
@@ -96,6 +82,29 @@ export const StateProvider = (props: {
   const [gameModal, setGameModal] = useState('')
 
   useKeyboard((key) => dispatch({ type: Action.input, payload: key }))
+  console.log(state.answer)
+
+  useEffect(() => {
+    setTimeout(() => {
+      const userGrid = state.grid.map(
+        ({ letter, lock }: { letter: string; lock: boolean }, i: number) =>
+          i % 5 === 0 ? '%' + (lock ? letter || '-' : '-') : letter || '-'
+      )
+      const userWords = userGrid.join('').split('%')
+      if (userWords.find((w: string) => w === state.answer)) {
+        setGameModal('winner!')
+      } else {
+        if (
+          userGrid.filter(
+            ({ letter, lock }: { letter: string; lock: boolean }) =>
+              letter && lock
+          ).length > 29
+        ) {
+          setGameModal('looser!')
+        }
+      }
+    }, 2000)
+  }, [state.grid])
 
   useEffect(() => {
     setValue(state)
@@ -111,6 +120,7 @@ export const StateProvider = (props: {
       <GameState
         isOpen={!!gameModal}
         onClose={() => {
+          setGameModal('')
           dispatch({ type: Action.reset, payload: {} })
         }}
         title='You win!'

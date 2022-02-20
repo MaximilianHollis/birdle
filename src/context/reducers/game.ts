@@ -37,9 +37,7 @@ export const input = (
 
 export const validate = (
   grid: IElement[],
-  check: (arg0: string, arg1: number, arg2: string) => boolean | undefined,
-  checkWin?: (arg0: string) => boolean,
-  gameOver?: VoidFunction
+  check: (arg0: string, arg1: number, arg2: string) => boolean | undefined
 ) => {
   let newGrid: IElement[] = JSON.parse(JSON.stringify(grid))
   const index = newGrid.filter(({ letter }) => letter).length
@@ -49,48 +47,45 @@ export const validate = (
 
   const start = newGrid.findIndex(({ lock }) => !lock)
   const isWord = word.length === 5 && words.includes(word.join(''))
-  if (isWord && checkWin) {
-    if (!checkWin(word.join('')))
-      if (index > 28) {
-        if (isWord) {
-          for (let i = start; i < start + 5; i++) {
-            newGrid[i].correct = check(newGrid[i].letter, i % 5, 'correct')
-            newGrid[i].semiCorrect = check(
-              newGrid[i].letter,
-              i % 5,
-              'semiCorrect'
-            )
-            newGrid[i].lock = true
-            newGrid[i].err = false
-            newGrid[i].err = false
-          }
-          if (gameOver) gameOver()
-        } else if (start == -1) {
-          if (gameOver) gameOver()
-        } else {
-          for (let i = start; i < 30; i++) {
-            newGrid[i].err = true
-          }
+  if (isWord) {
+    if (index > 28) {
+      if (isWord) {
+        for (let i = start; i < start + 5; i++) {
+          newGrid[i].correct = check(newGrid[i].letter, i % 5, 'correct')
+          newGrid[i].semiCorrect = check(
+            newGrid[i].letter,
+            i % 5,
+            'semiCorrect'
+          )
+          newGrid[i].lock = true
+          newGrid[i].err = false
+          newGrid[i].err = false
         }
+      } else if (start == -1) {
       } else {
-        if (isWord && index % 5 === 0) {
-          for (let i = start; i < start + 5 && i < 25; i++) {
-            newGrid[i].lock = true
-            newGrid[i].correct = check(newGrid[i].letter, i % 5, 'correct')
-            newGrid[i].semiCorrect = check(
-              newGrid[i].letter,
-              i % 5,
-              'semiCorrect'
-            )
-            newGrid[i + 5].lock = false
-            newGrid[i].err = false
-          }
-        } else if (!isWord && word.length === 5) {
-          for (let i = start; i < start + 5 && i < 25; i++) {
-            newGrid[i].err = true
-          }
+        for (let i = start; i < 30; i++) {
+          newGrid[i].err = true
         }
       }
+    } else {
+      if (isWord && index % 5 === 0) {
+        for (let i = start; i < start + 5 && i < 25; i++) {
+          newGrid[i].lock = true
+          newGrid[i].correct = check(newGrid[i].letter, i % 5, 'correct')
+          newGrid[i].semiCorrect = check(
+            newGrid[i].letter,
+            i % 5,
+            'semiCorrect'
+          )
+          newGrid[i + 5].lock = false
+          newGrid[i].err = false
+        }
+      } else if (!isWord && word.length === 5) {
+        for (let i = start; i < start + 5 && i < 25; i++) {
+          newGrid[i].err = true
+        }
+      }
+    }
   }
 
   return newGrid
