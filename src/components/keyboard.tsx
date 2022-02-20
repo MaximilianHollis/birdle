@@ -66,6 +66,7 @@ export default ({ State }: { State: any }) => {
     dispatch,
   }: { state: IStateContext['state']; dispatch: IStateContext['dispatch'] } =
     useContext(State)
+
   const correct = (letter: string) =>
     !!state.grid.find(({ letter: l, correct }) => !!(l === letter && correct))
   const semiCorrect = (letter: string) =>

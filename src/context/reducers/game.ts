@@ -49,26 +49,15 @@ export const validate = (
   const isWord = word.length === 5 && words.includes(word.join(''))
   if (isWord) {
     if (index > 28) {
-      if (isWord) {
-        for (let i = start; i < start + 5; i++) {
-          newGrid[i].correct = check(newGrid[i].letter, i % 5, 'correct')
-          newGrid[i].semiCorrect = check(
-            newGrid[i].letter,
-            i % 5,
-            'semiCorrect'
-          )
-          newGrid[i].lock = true
-          newGrid[i].err = false
-          newGrid[i].err = false
-        }
-      } else if (start == -1) {
-      } else {
-        for (let i = start; i < 30; i++) {
-          newGrid[i].err = true
-        }
+      for (let i = start; i < start + 5; i++) {
+        newGrid[i].correct = check(newGrid[i].letter, i % 5, 'correct')
+        newGrid[i].semiCorrect = check(newGrid[i].letter, i % 5, 'semiCorrect')
+        newGrid[i].lock = true
+        newGrid[i].err = false
+        newGrid[i].err = false
       }
     } else {
-      if (isWord && index % 5 === 0) {
+      if (index % 5 === 0) {
         for (let i = start; i < start + 5 && i < 25; i++) {
           newGrid[i].lock = true
           newGrid[i].correct = check(newGrid[i].letter, i % 5, 'correct')
@@ -80,11 +69,11 @@ export const validate = (
           newGrid[i + 5].lock = false
           newGrid[i].err = false
         }
-      } else if (!isWord && word.length === 5) {
-        for (let i = start; i < start + 5 && i < 25; i++) {
-          newGrid[i].err = true
-        }
       }
+    }
+  } else if (word.length === 5) {
+    for (let i = start; i < start + 5 && i < 30; i++) {
+      newGrid[i].err = true
     }
   }
 
