@@ -1,10 +1,16 @@
-import React, { useEffect } from 'react'
+import React, {
+  ReducerAction,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react'
 import { createReducer } from 'react-use'
 import createSagaMiddleware from 'redux-saga'
 import logger from 'redux-logger'
 import { Action, IAction, IStateContext, IElement } from '../types'
 import { input, validate } from './reducers/game'
 import useKeyboard from '../hooks/useKeyboard'
+import rootSaga from './sagas/multiplayer'
 
 const arr: IElement[] = new Array(30)
   .fill({ letter: '', lock: false, err: false }, 0, 5)
@@ -19,6 +25,23 @@ const sagaMiddleware = createSagaMiddleware()
 const useSagaReducer = createReducer(sagaMiddleware, logger)
 // @ts-ignore
 const State = React.createContext<IStateContext>({ state: { grid: arr } })
+
+const check = (letter: string, index: number, key: string) => {
+  const ans = 'words' //server response
+  if (key === 'correct') {
+    if (ans.indexOf(letter) === index) {
+      return true
+    } else {
+      return false
+    }
+  } else {
+    if (ans.includes(letter)) {
+      return true
+    } else {
+      return false
+    }
+  }
+}
 
 export const StateProvider = (props: {
   children:
@@ -51,35 +74,27 @@ export const StateProvider = (props: {
     }
   }
 
-  // @ts-ignore
+  //@ts-ignore
   const [state, dispatch] = useSagaReducer(reducer, defaultState)
 
-  const check = (letter: string, index: number, key: string) => {
-    const ans = 'words' //server response
-    if (key === 'correct') {
-      if (ans.indexOf(letter) === index) {
-        return true
-      } else {
-        return false
-      }
-    } else {
-      if (ans.includes(letter)) {
-        return true
-      } else {
-        return false
-      }
-    }
-  }
-  const key = useKeyboard()
+  useKeyboard((key) => dispatch({ type: Action.input, payload: key }))
+
+
   useEffect(() => {
-    if (key?.code) {
-      dispatch({ type: Action.input, payload: key })
+    console.log('effect')
+    //@ts-ignore
+    const task = sagaMiddleware.run(rootSaga)
+
+    return (): void => {
+      console.log('cancel effect')
+      task.cancel()
     }
-  }, [key])
+  }, [])
 
   return (
     <State.Provider
       value={{
+        // @ts-ignore
         state,
         dispatch,
       }}

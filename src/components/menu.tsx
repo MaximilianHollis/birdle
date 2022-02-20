@@ -1,8 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion'
+import { useRouter } from 'next/router'
 import Portal from '../HOCs/portal'
-import { IoMenu, IoClose } from 'react-icons/io5'
 import styled from 'styled-components'
-import React from 'react'
+import React, { useState } from 'react'
 
 const Container = styled(motion.div)`
   position: fixed;
@@ -12,6 +12,7 @@ const Container = styled(motion.div)`
   height: calc(100vh - 44px);
   display: flex;
   justify-content: center;
+  flex-direction: column;
   align-items: center;
   z-index: 999;
   background: white;
@@ -27,13 +28,65 @@ const Wrapper = styled(motion.div)`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  gap: 30px;
+  & > span {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+  }
 `
 
-//MAKE LINKS TO FOR PREFETCHING
-const Item = styled(motion.div)`
-  padding: 20px 10px;
+const TipBox = styled.div`
+  width: 400px;
+  max-width: 95%;
+  height: 200px;
+  border: 2px solid black;
+  border-radius: 10px;
+  margin: 10px auto;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+`
+
+const Item = styled(motion.div)<{ selected: boolean }>`
   font-weight: bold;
+  position: relative;
+  font-size: 24px;
+  text-transform: uppercase;
+  cursor: pointer;
+  :before {
+    position: absolute;
+    content: '';
+    width: ${(props) => (props.selected ? '100%' : '0%')};
+    bottom: 0;
+    height: 2px;
+    background: black;
+    transition: width 0.3s;
+  }
+  user-select: none;
+`
+
+const SideText = styled.span`
+  position: relative;
+
+  :before {
+    position: absolute;
+    height: 100%;
+    top: -25px;
+    left: 0px;
+
+    content: '';
+    text-align: center;
+    font-size: 12px;
+  }
+`
+
+const Divider = styled.div`
+  width: 100%;
+  height: 1px;
+  background: gray;
 `
 
 const spring = {
@@ -70,6 +123,8 @@ const item = {
   },
 }
 
+//const items = ['Standard', 'Daily', 'Create', 'Join']
+
 export default function Menu({
   isOpen,
   onClose,
@@ -77,6 +132,10 @@ export default function Menu({
   isOpen: boolean
   onClose: VoidFunction
 }) {
+  const router = useRouter()
+
+  const [tip, setTip] = useState('Standard')
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -90,15 +149,80 @@ export default function Menu({
             onKeyDown={(e) => e.key === 'Escape' && onClose()}
           >
             <Wrapper>
-              <Item variants={item}>1. Hello</Item>
-              <Item variants={item}>2. Hello</Item>
-              <Item variants={item}>Hello</Item>
-              <Item variants={item}>Hello</Item>
-              <Item variants={item}>Hello</Item>
+              <SideText>
+                <ItemLink
+                  tip={tip}
+                  setTip={setTip}
+                  onSelect={() => {
+                    router.push('/')
+                    onClose()
+                  }}
+                >
+                  Standard
+                </ItemLink>
+                <ItemLink
+                  tip={tip}
+                  setTip={setTip}
+                  onSelect={() => {
+                    alert('Not yet implemented')
+                  }}
+                >
+                  Daily
+                </ItemLink>
+              </SideText>
+
+              <Divider />
+              <SideText>
+                <ItemLink
+                  tip={tip}
+                  setTip={setTip}
+                  onSelect={() => {
+                    router.push('/multiplayer')
+                    onClose()
+                  }}
+                >
+                  Create
+                </ItemLink>
+                <ItemLink
+                  tip={tip}
+                  setTip={setTip}
+                  onSelect={() => {
+                    router.push('/multiplayer')
+                    onClose()
+                  }}
+                >
+                  Join
+                </ItemLink>
+              </SideText>
             </Wrapper>
+            {/*put more info here */}
+            <TipBox>Click again to select</TipBox>
           </Container>
         </Portal>
       )}
     </AnimatePresence>
+  )
+}
+
+const ItemLink = ({
+  children: name,
+  setTip,
+  onSelect,
+  tip,
+}: {
+  children: string
+  setTip: Function
+  onSelect: VoidFunction
+  tip: string
+}) => {
+  return (
+    <Item
+      variants={item}
+      onClick={() => (tip === name ? onSelect() : setTip(name))}
+      /*       onMouseOver={() => setTip(name)}
+       */ selected={name === tip}
+    >
+      {name}
+    </Item>
   )
 }

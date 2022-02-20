@@ -55,9 +55,7 @@ export default () => {
   const [howTo, setHowTo] = useState(false)
   const [leaderboard, setLeaderboard] = useState(false)
   const [settings, setSettings] = useState(false)
-  const key = useKeyboard()
-
-  useEffect(() => {
+  useKeyboard((key) => {
     if (!(howTo || leaderboard || settings)) {
       if (key.key === '1') setMenu(!menu)
       if (key.key === '2') setHowTo(!howTo)
@@ -74,7 +72,7 @@ export default () => {
       setLeaderboard(false)
       setSettings(false)
     }
-  }, [key])
+  })
 
   return (
     <Wrapper>

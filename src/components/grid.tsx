@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { useContext } from 'react'
 import styled from 'styled-components'
-import State from '../context/state'
+import { IStateContext } from '../types'
 
 const Wrapper = styled(motion.div)`
   display: grid;
@@ -9,22 +9,6 @@ const Wrapper = styled(motion.div)`
   grid-gap: 4px;
   margin: 10px 0;
   position: relative;
-`
-
-const Overlay = styled(motion.div)<{ focus: boolean }>`
-  position: absolute;
-  top: -5%;
-  left: -5%;
-  width: 110%;
-  height: 110%;
-  background: transparent;
-  backdrop-filter: ${(props) => (!props.focus ? `blur(4px)` : `blur(0px)`)};
-  color: #555;
-  animation-delay: 1s;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
 `
 
 const Square = styled(motion.div)<{ filled?: boolean }>`
@@ -122,14 +106,12 @@ const square = (
   return properties
 }
 
-export default () => {
-  const { state } = useContext(State)
+export default ({ State }: { State: any }) => {
+  const { state }: { state: IStateContext['state'] } = useContext(State)
   return (
     <Wrapper variants={container} initial='hidden' animate='visible'>
-      {/* <Overlay>{!focus && 'Tap to continue'}</Overlay> */}
       {state.grid.map(({ letter, lock, err, correct, semiCorrect }, i) => (
         <Square
-          title={lock ? 'locked' : 'unlocked'}
           transition={{
             rotateY: {
               duration: 1,

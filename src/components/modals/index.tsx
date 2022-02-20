@@ -2,8 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import Portal from '../../HOCs/portal'
 import { IoMenu, IoClose } from 'react-icons/io5'
 import styled from 'styled-components'
-import React, { ReactNode, useEffect } from 'react'
-import useKeyboard from '../../hooks/useKeyboard'
+import React, { ReactNode } from 'react'
 
 const Container = styled(motion.div)`
   position: fixed;

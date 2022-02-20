@@ -2,7 +2,6 @@ import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 import { FC, ReactElement, ReactNode } from 'react'
 import { createGlobalStyle } from 'styled-components'
-import { StateProvider } from '../src/context/state'
 
 const GlobalStyle = createGlobalStyle`
   html {
@@ -14,10 +13,15 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
-  :focus {
-    /* outline: none; */
+  @media screen and (max-width: 850px) {
+  .mdl-layout__container {
+    position: static;
+    }
   }
-  
+
+  .mdl-layout__header{
+    position: fixed;
+  }
 `
 
 import Navbar from '../src/components/navbar'
@@ -33,10 +37,8 @@ type AppPropsWithLayout = AppProps & {
 const App: FC<AppProps> = ({ Component, pageProps }: AppPropsWithLayout) => {
   return (
     <>
-      <StateProvider>
-        <Navbar />
-        <Component {...pageProps} />
-      </StateProvider>
+      <Navbar />
+      <Component {...pageProps} />
       <GlobalStyle />
     </>
   )

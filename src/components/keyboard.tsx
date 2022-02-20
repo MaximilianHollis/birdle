@@ -1,8 +1,7 @@
 import { motion } from 'framer-motion'
 import { useContext } from 'react'
 import styled from 'styled-components'
-import State from '../context/state'
-import { Action } from '../types'
+import { Action, IStateContext } from '../types'
 
 import { FiDelete } from 'react-icons/fi'
 
@@ -61,8 +60,12 @@ const keyboard =
   '\n' +
   'enter z x c v b n m del'
 
-export default () => {
-  const { state, dispatch } = useContext(State)
+export default ({ State }: { State: any }) => {
+  const {
+    state,
+    dispatch,
+  }: { state: IStateContext['state']; dispatch: IStateContext['dispatch'] } =
+    useContext(State)
   const correct = (letter: string) =>
     !!state.grid.find(({ letter: l, correct }) => !!(l === letter && correct))
   const semiCorrect = (letter: string) =>
@@ -77,7 +80,7 @@ export default () => {
 
   const onClick = (l: string) => {
     if (l === 'enter') {
-      dispatch({ type: Action.input, payload: { key: 'Enter' } })
+      dispatch({ type: Action.input, payload: { code: 'Enter' } })
     } else if (l === 'del') {
       dispatch({ type: Action.input, payload: { key: 'Backspace' } })
     } else {

@@ -15,12 +15,14 @@ export interface IStateContext {
   dispatch: Dispatch<any>
 }
 
+
 export enum Action {
   input = 'input',
   get = 'get',
   set = 'set',
   check = 'check',
   setIndex = 'setIndex',
+  reset = "reset"
 }
 
 export interface IAction {
