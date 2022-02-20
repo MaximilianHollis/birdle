@@ -1,9 +1,4 @@
-import React, {
-  ReducerAction,
-  useEffect,
-  useLayoutEffect,
-  useState,
-} from 'react'
+import React, { useEffect } from 'react'
 import { createReducer } from 'react-use'
 import createSagaMiddleware from 'redux-saga'
 import logger from 'redux-logger'
@@ -78,7 +73,6 @@ export const StateProvider = (props: {
   const [state, dispatch] = useSagaReducer(reducer, defaultState)
 
   useKeyboard((key) => dispatch({ type: Action.input, payload: key }))
-
 
   useEffect(() => {
     console.log('effect')

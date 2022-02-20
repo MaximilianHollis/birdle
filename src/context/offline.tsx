@@ -1,15 +1,17 @@
-import React, { useEffect, useReducer } from 'react'
+import React, { useEffect, useReducer, useState } from 'react'
 import { useLocalStorage } from 'react-use'
 import { Action, IAction, IStateContext, IElement } from '../types'
 import { input, validate } from './reducers/game'
 import useKeyboard from '../hooks/useKeyboard'
 import { answers } from '../words'
+import GameState from '../components/modals/gameState'
 
 const genWord = () => {
   const choices = answers.split('\n')
-  return choices[Math.random() * choices.length]
+  const choice = choices[Math.floor(Math.random() * choices.length)]
+  console.log(choice)
+  return choice
 }
-
 
 const arr: IElement[] = new Array(30)
   .fill({ letter: '', lock: false, err: false }, 0, 5)
@@ -54,14 +56,17 @@ export const StateProvider = (props: {
       }
     }
 
-    const checkWord = (word: string) => {
+    const checkWin = (word: string) => {
       if (word === state.answer) {
         //YOU MAY WANT TO PUT A DELAY HERE
-        alert('You win!')
+        setGameModal('You win!')
         return true
       } else {
         return false
       }
+    }
+    const gameOver = () => {
+      setTimeout(() => setGameModal('You lose!'), 1000)
     }
     //let actionId = nanoid()
     switch (action.type) {
@@ -69,7 +74,7 @@ export const StateProvider = (props: {
         if (action.payload?.code === 'Enter') {
           return {
             ...state,
-            grid: validate(state.grid, check, checkWord),
+            grid: validate(state.grid, check, checkWin, gameOver),
           }
         } else if (action.payload?.key) {
           return {
@@ -78,7 +83,7 @@ export const StateProvider = (props: {
           }
         }
       case Action.reset:
-        return {...state, answer: genWord()}
+        return { ...state, answer: genWord() }
       default:
         return state
     }
@@ -88,6 +93,7 @@ export const StateProvider = (props: {
 
   // @ts-ignore
   const [state, dispatch] = useReducer(reducer, value)
+  const [gameModal, setGameModal] = useState('')
 
   useKeyboard((key) => dispatch({ type: Action.input, payload: key }))
 
@@ -102,6 +108,13 @@ export const StateProvider = (props: {
         dispatch,
       }}
     >
+      <GameState
+        isOpen={!!gameModal}
+        onClose={() => {
+          dispatch({ type: Action.reset, payload: {} })
+        }}
+        title='You win!'
+      />
       {props.children}
     </State.Provider>
   )

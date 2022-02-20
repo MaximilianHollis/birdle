@@ -8,7 +8,7 @@ import {
 } from 'react-icons/md'
 import HowTo from '../components/modals/howTo'
 import Menu from './menu'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import useKeyboard from '../hooks/useKeyboard'
 
 const Wrapper = styled.div`

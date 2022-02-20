@@ -6,15 +6,15 @@ import React, { ReactNode } from 'react'
 
 const Container = styled(motion.div)`
   position: fixed;
-  top: 0;
+  top: 44px;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 999;
-  padding-bottom: 5%;
+  padding-bottom: calc(10% + 44px);
   &:focus {
     outline: none;
   }

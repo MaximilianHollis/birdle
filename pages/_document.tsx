@@ -59,8 +59,8 @@ export default class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
-          <div id='menu' />
           <div id='modal' />
+          <div id='menu' />
         </body>{' '}
       </Html>
     )
