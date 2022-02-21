@@ -10,6 +10,8 @@ import HowTo from '../components/modals/howTo'
 import Menu from './menu'
 import { useState } from 'react'
 import useKeyboard from '../hooks/useKeyboard'
+import { FaEarlybirds } from 'react-icons/fa'
+
 
 const Wrapper = styled.div`
   z-index: 9999;
@@ -45,8 +47,13 @@ const Wrapper = styled.div`
   }
 `
 
-const Title = styled.h2`
+const Title = styled.div`
   color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 `
 
 export default () => {
@@ -77,7 +84,7 @@ export default () => {
   return (
     <Wrapper>
       <Menu isOpen={menu} onClose={() => setMenu(false)} />
-      <HowTo isOpen={howTo} onClose={() => setHowTo(false)} title='How to' />
+      <HowTo isOpen={howTo} onClose={() => setHowTo(false)} title='How to play' />
       <HowTo
         isOpen={leaderboard}
         onClose={() => setLeaderboard(false)}
@@ -92,22 +99,25 @@ export default () => {
       <span>
         <span onClick={() => setMenu(!menu)}>
           {menu ? (
-            <MdClose color='white' size={30} />
+            <MdClose color='white' size={22} />
           ) : (
-            <MdMenu color='white' size={30} />
+            <MdMenu color='white' size={22} />
           )}
         </span>
         <span onClick={() => setHowTo(true)}>
-          <MdHelpOutline color='white' size={28} />
+          <MdHelpOutline color='white' size={22} />
         </span>
       </span>
-      <Title>Birdle🐦</Title>
+      <Title>
+        <FaEarlybirds color='#89CFF0' size={22}/>
+        <h2>Birdle</h2>
+      </Title>
       <span>
         <span onClick={() => setLeaderboard(true)}>
-          <MdLeaderboard color='white' size={28} />
+          <MdLeaderboard color='white' size={22} />
         </span>
         <span onClick={() => setSettings(true)}>
-          <MdSettings color='white' size={28} />
+          <MdSettings color='white' size={22} />
         </span>
       </span>
     </Wrapper>
