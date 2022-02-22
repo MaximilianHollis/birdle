@@ -81,7 +81,14 @@ export const StateProvider = (props: {
   const [state, dispatch] = useReducer(reducer, value)
   const [gameModal, setGameModal] = useState('')
 
-  useKeyboard((key) => dispatch({ type: Action.input, payload: key }))
+  useKeyboard((key) => {
+    dispatch({ type: Action.input, payload: key })
+    console.log(key)
+    if (key.code === 'Escape') {
+      dispatch({ type: Action.reset, payload: {} })
+      setGameModal('')
+    }
+  })
   console.log(state.answer)
 
   useEffect(() => {
@@ -95,10 +102,7 @@ export const StateProvider = (props: {
         setGameModal('winner!')
       } else {
         if (
-          userGrid.filter(
-            ({ letter, lock }: { letter: string; lock: boolean }) =>
-              letter && lock
-          ).length > 29
+          userGrid.filter(({ lock }: { lock: boolean }) => lock).length > 29
         ) {
           setGameModal('loser!')
         }
@@ -123,7 +127,7 @@ export const StateProvider = (props: {
           setGameModal('')
           dispatch({ type: Action.reset, payload: {} })
         }}
-        title='You win!'
+        title={gameModal}
       />
       {props.children}
     </State.Provider>
