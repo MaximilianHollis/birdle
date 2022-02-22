@@ -3,8 +3,8 @@ import { useRouter } from 'next/router'
 import Portal from '../HOCs/portal'
 import styled from 'styled-components'
 import React, { useState } from 'react'
-import { Key } from './keyboard'
-
+/* import { Key } from './keyboard'
+ */
 const Container = styled(motion.div)`
   position: fixed;
   top: 44px;
@@ -144,8 +144,8 @@ export default function Menu({
   const router = useRouter()
 
   const [tip, setTip] = useState('Standard')
-  const [code, setCode] = useState('')
-
+  /*   const [code, setCode] = useState('')
+   */
   return (
     <AnimatePresence>
       {isOpen && (
@@ -212,11 +212,11 @@ export default function Menu({
                 : 'Click again to select'}
               {tip === 'Join' && (
                 <JoinRow>
+                 {/*  <Key>L</Key>
                   <Key>L</Key>
                   <Key>L</Key>
                   <Key>L</Key>
-                  <Key>L</Key>
-                  <Key>L</Key>
+                  <Key>L</Key> */}
                 </JoinRow>
               )}
             </TipBox>
