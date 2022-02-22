@@ -16,6 +16,7 @@ const Modal = ({
           display: 'flex',
           justifyContent: 'space-evenly',
           alignItems: 'flex-end',
+          padding: '20px',
         }}
       >
         eee
