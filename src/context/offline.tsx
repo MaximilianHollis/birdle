@@ -100,7 +100,7 @@ export const StateProvider = (props: {
               letter && lock
           ).length > 29
         ) {
-          setGameModal('looser!')
+          setGameModal('loser!')
         }
       }
     }, 2000)

@@ -25,7 +25,7 @@ interface KeyProps {
   readonly $borderColor: boolean
 }
 
-const Key = styled(motion.button)<KeyProps>`
+export const Key = styled(motion.button)<KeyProps>`
   font-family: inherit;
   font-weight: bold;
   padding: 0;

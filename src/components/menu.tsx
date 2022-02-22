@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import Portal from '../HOCs/portal'
 import styled from 'styled-components'
 import React, { useState } from 'react'
+import { Key } from './keyboard'
 
 const Container = styled(motion.div)`
   position: fixed;
@@ -48,6 +49,14 @@ const TipBox = styled.div`
   text-align: center;
   display: flex;
   justify-content: center;
+  flex-direction: column;
+`
+
+const JoinRow = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 3px;
+  gap: 0 2px;
 `
 
 const Item = styled(motion.div)<{ selected: boolean }>`
@@ -135,6 +144,7 @@ export default function Menu({
   const router = useRouter()
 
   const [tip, setTip] = useState('Standard')
+  const [code, setCode] = useState('')
 
   return (
     <AnimatePresence>
@@ -196,7 +206,20 @@ export default function Menu({
               </SideText>
             </Wrapper>
             {/*put more info here */}
-            <TipBox>Click again to select</TipBox>
+            <TipBox>
+              {tip === 'Join'
+                ? 'Please enter join code:'
+                : 'Click again to select'}
+              {tip === 'Join' && (
+                <JoinRow>
+                  <Key>L</Key>
+                  <Key>L</Key>
+                  <Key>L</Key>
+                  <Key>L</Key>
+                  <Key>L</Key>
+                </JoinRow>
+              )}
+            </TipBox>
           </Container>
         </Portal>
       )}
