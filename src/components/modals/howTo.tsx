@@ -19,7 +19,7 @@ const Modal = ({
           padding: '20px',
         }}
       >
-        eee
+        Not yet Implemented
       </div>
     </ModalSkeleton>
   )

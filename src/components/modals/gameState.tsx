@@ -18,7 +18,7 @@ const Modal = ({
           alignItems: 'flex-end',
         }}
       >
-        eee
+        Close to play again
       </div>
     </ModalSkeleton>
   )

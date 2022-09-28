@@ -168,7 +168,7 @@ export default function Menu({
                     onClose()
                   }}
                 >
-                  Standard
+                  Unlimited
                 </ItemLink>
                 <ItemLink
                   tip={tip}
@@ -187,7 +187,7 @@ export default function Menu({
                   tip={tip}
                   setTip={setTip}
                   onSelect={() => {
-                    router.push('/multiplayer')
+                    alert('Not yet implemented')
                     onClose()
                   }}
                 >
@@ -197,7 +197,7 @@ export default function Menu({
                   tip={tip}
                   setTip={setTip}
                   onSelect={() => {
-                    router.push('/multiplayer')
+                    alert('Not yet implemented')
                     onClose()
                   }}
                 >

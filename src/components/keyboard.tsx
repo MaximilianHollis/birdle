@@ -25,7 +25,7 @@ interface KeyProps {
   readonly $borderColor: boolean
 }
 
-export const Key = styled(motion.button)<KeyProps>`
+export const Key = styled(motion.button) <KeyProps>`
   font-family: inherit;
   font-weight: bold;
   padding: 0;
@@ -113,6 +113,9 @@ export default ({ State }: { State: any }) => {
           </Row>
         )
       })}
+      <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+        <button onClick={() => dispatch({ type: Action.reset, payload: {} })}>Reset</button>
+      </div>
     </Wrapper>
   )
 }

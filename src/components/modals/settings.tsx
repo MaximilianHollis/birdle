@@ -18,7 +18,7 @@ const Modal = ({
           alignItems: 'flex-end',
         }}
       >
-        eee
+        <button>Reset</button>
       </div>
     </ModalSkeleton>
   )

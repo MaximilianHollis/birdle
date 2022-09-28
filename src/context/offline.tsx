@@ -77,7 +77,6 @@ export const StateProvider = (props: {
 
   const [value, setValue, _remove] = useLocalStorage('offline', defaultState)
 
-  // @ts-ignore
   const [state, dispatch] = useReducer(reducer, value)
   const [gameModal, setGameModal] = useState('')
 
@@ -85,7 +84,6 @@ export const StateProvider = (props: {
     dispatch({ type: Action.input, payload: key })
     console.log(key)
     if (key.code === 'Escape') {
-      dispatch({ type: Action.reset, payload: {} })
       setGameModal('')
     }
   })
@@ -99,12 +97,12 @@ export const StateProvider = (props: {
       )
       const userWords = userGrid.join('').split('%')
       if (userWords.find((w: string) => w === state.answer)) {
-        setGameModal('winner!')
+        setGameModal('You win!')
       } else {
         if (
-          userGrid.filter(({ lock }: { lock: boolean }) => lock).length > 29
+          state.grid.filter(({ lock }: { lock: boolean }) => lock).length > 29
         ) {
-          setGameModal('loser!')
+          setGameModal('You loose!')
         }
       }
     }, 2000)

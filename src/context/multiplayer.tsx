@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect } from 'react'
 import { createReducer } from 'react-use'
 import createSagaMiddleware from 'redux-saga'
@@ -16,9 +17,7 @@ const defaultState = {
 }
 
 const sagaMiddleware = createSagaMiddleware()
-// @ts-ignore
 const useSagaReducer = createReducer(sagaMiddleware, logger)
-// @ts-ignore
 const State = React.createContext<IStateContext>({ state: { grid: arr } })
 
 const check = (letter: string, index: number, key: string) => {
@@ -69,14 +68,12 @@ export const StateProvider = (props: {
     }
   }
 
-  //@ts-ignore
   const [state, dispatch] = useSagaReducer(reducer, defaultState)
 
   useKeyboard((key) => dispatch({ type: Action.input, payload: key }))
 
   useEffect(() => {
     console.log('effect')
-    //@ts-ignore
     const task = sagaMiddleware.run(rootSaga)
 
     return (): void => {
@@ -88,7 +85,6 @@ export const StateProvider = (props: {
   return (
     <State.Provider
       value={{
-        // @ts-ignore
         state,
         dispatch,
       }}

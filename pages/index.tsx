@@ -3,6 +3,8 @@ import Grid from '../src/components/grid'
 import Keyboard from '../src/components/keyboard'
 import { StateProvider } from '../src/context/offline'
 import State from '../src/context/offline'
+import { useContext } from 'react'
+import { Action, IStateContext } from '../src/types'
 
 const Wrapper = styled.section`
   height: calc(100vh - 44px);
